@@ -1,0 +1,6 @@
+[submodule "BaseCom"]
+	path = BaseCom
+	url = https://github.com/Freshdouble/BaseCom
+[submodule "libsmp"]
+	path = libsmp
+	url = https://github.com/Freshdouble/libsmp
