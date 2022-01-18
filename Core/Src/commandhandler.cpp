@@ -61,12 +61,17 @@ void parseInput(uint8_t* buffer, size_t length)
 
 void loop()
 {
+	static uint32_t lastTimestamp = 0;
 	LEDStatus status;
-	status.argument.Write_ledstatus(HAL_GPIO_ReadPin(LD2_GPIO_Port, LD2_Pin) == GPIO_PIN_SET);
-	std::array<uint8_t, LEDStatus::packetLength> data;
-	auto size = status.SerializeWithID(data);
-	smp.SendData<LEDStatus::packetLength, sendOverUART>(data, size);
-	HAL_Delay(100);
+	if(HAL_GetTick() > (lastTimestamp + 1000))
+	{
+		bool led = HAL_GPIO_ReadPin(LD2_GPIO_Port, LD2_Pin) == GPIO_PIN_SET;
+		status.argument.Write_ledstatus(led);
+		std::array<uint8_t, LEDStatus::packetLength> data;
+		auto size = status.SerializeWithID(data);
+		smp.SendData<LEDStatus::packetLength, sendOverUART>(data, size);
+		lastTimestamp = HAL_GetTick();
+	}
 }
 
 #ifdef __cplusplus

@@ -115,6 +115,7 @@ int main(void)
 		  size_t bytes = dma_ReadBytes(&uartRingBuffer, msg, sizeof(msg));
 		  parseInput(msg, bytes);
 	  }
+	  loop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
