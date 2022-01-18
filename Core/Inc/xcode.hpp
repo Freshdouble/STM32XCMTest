@@ -75,7 +75,9 @@ struct LEDStatus : public ComPacket<LEDStatus_Argument>
 		if(length <= maxdatalength)
 		{
 			auto [valid, iterator, remainingBytes] = CheckIDMatch(data, length, idBytes);
-			return make_tuple(valid, std::distance(data.begin(), iterator), remainingBytes);
+			auto dist = std::distance(data.begin(), iterator);
+			assert(dist >= 0);
+			return make_tuple(valid, dist, remainingBytes);
 		}
 		else
 		{
@@ -126,7 +128,7 @@ struct LEDStatus : public ComPacket<LEDStatus_Argument>
 enum class Messages
 {
 	LEDStatus,
-	Unkown
+	Unknown
 };
 
 template<Messages message> struct get_message;
@@ -137,7 +139,7 @@ auto GetMatchedMessage(const std::array<uint8_t, maxdatalength> &data, size_t le
 {
 	std::tuple<bool, size_t, size_t> ret;
 	if(std::get<0>(ret = LEDStatus::IDMatch(data, length))) return std::make_tuple(Messages::LEDStatus, std::get<1>(ret), std::get<2>(ret));
-	return std::make_tuple(Messages::Unkown, 0U, 0U);
+	return std::make_tuple(Messages::Unknown, 0U, 0U);
 }
 //}
 
@@ -193,7 +195,9 @@ struct SetLEDStatus : public ComPacket<SetLEDStatus_Argument>
 		if(length <= maxdatalength)
 		{
 			auto [valid, iterator, remainingBytes] = CheckIDMatch(data, length, idBytes);
-			return make_tuple(valid, std::distance(data.begin(), iterator), remainingBytes);
+			auto dist = std::distance(data.begin(), iterator);
+			assert(dist >= 0);
+			return make_tuple(valid, dist, remainingBytes);
 		}
 		else
 		{
@@ -244,7 +248,7 @@ struct SetLEDStatus : public ComPacket<SetLEDStatus_Argument>
 enum class Commands
 {
 	SetLEDStatus,
-	Unkown
+	Unknown
 };
 
 template<Commands message> struct get_command;
@@ -255,7 +259,7 @@ auto GetMatchedCommand(const std::array<uint8_t, maxdatalength> &data, size_t le
 {
 	std::tuple<bool, size_t, size_t> ret;
 	if(std::get<0>(ret = SetLEDStatus::IDMatch(data, length))) return std::make_tuple(Commands::SetLEDStatus, std::get<1>(ret), std::get<2>(ret));
-	return std::make_tuple(Commands::Unkown, 0U, 0U);
+	return std::make_tuple(Commands::Unknown, 0U, 0U);
 }
 //}
 #endif

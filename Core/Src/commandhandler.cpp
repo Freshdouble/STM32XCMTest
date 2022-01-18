@@ -48,7 +48,7 @@ signed char SMPReceiveFunc(uint8_t *data, uint32_t length)
 		}
 		break;
 	}
-	case Commands::Unkown:
+	case Commands::Unknown:
 		break;
 	}
 
